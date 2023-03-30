@@ -797,7 +797,6 @@ open class URLSessionWebSocketTask : URLSessionTask {
         }
     }
     
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func send(_ message: Message) async throws -> Void {
         let _: Void = try await withCheckedThrowingContinuation { continuation in
             send(message) { error in
@@ -810,14 +809,13 @@ open class URLSessionWebSocketTask : URLSessionTask {
         }
     }
     
-    private func send(_ message: Message, completionHandler: @escaping (Error?) -> Void) {
+    public func send(_ message: Message, completionHandler: @escaping (Error?) -> Void) {
         self.workQueue.async {
             self.sendBuffer.append((message, completionHandler))
             self.doPendingWork()
         }
     }
     
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func receive() async throws -> Message {
         try await withCheckedThrowingContinuation { continuation in
             receive() { result in
@@ -826,7 +824,7 @@ open class URLSessionWebSocketTask : URLSessionTask {
         }
     }
 
-    private func receive(completionHandler: @escaping (Result<Message, Error>) -> Void) {
+    public func receive(completionHandler: @escaping (Result<Message, Error>) -> Void) {
         self.workQueue.async {
             self.receiveCompletionHandlers.append(completionHandler)
             self.doPendingWork()
